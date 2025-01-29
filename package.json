@@ -6,7 +6,7 @@
   "engines": {
     "vscode": "^1.96.0"
   },
-  "publisher": "HypnoScript Team",
+  "publisher": "HypnoScriptTeam",
   "icon": "icons/hypnoscript.png",
   "main": "./out/extension.js",
   "activationEvents": [
