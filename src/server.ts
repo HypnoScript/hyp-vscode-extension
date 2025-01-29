@@ -7,6 +7,7 @@ import {
   InitializeParams,
   TextDocumentSyncKind,
   InitializeResult,
+  CompletionItemKind,
 } from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
 
@@ -29,6 +30,32 @@ connection.onRequest("textDocument/diagnostic", async (params) => {
   return {
     items: [], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
   };
+});
+
+// 🔍 Auto-Completion Handler
+connection.onCompletion((_textDocumentPosition) => {
+    return [
+        {
+            label: "Focus",
+            kind: CompletionItemKind.Keyword,
+            detail: "Startet ein HypnoScript-Programm"
+        },
+        {
+            label: "Relax",
+            kind: CompletionItemKind.Keyword,
+            detail: "Beendet ein HypnoScript-Programm"
+        },
+        {
+            label: "induce",
+            kind: CompletionItemKind.Keyword,
+            detail: "Deklariert eine Variable"
+        },
+        {
+            label: "suggestion",
+            kind: CompletionItemKind.Keyword,
+            detail: "Definiert eine Funktion"
+        }
+    ];
 });
 
 // Einfacher Linter: Überprüft auf fehlendes `Focus` und `Relax`
