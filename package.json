@@ -1,0 +1,25 @@
+{
+  "name": "hypnoscript-support",
+  "displayName": "HypnoScript Support",
+  "description": "A Language support extension for the esotheric language HypnoScript",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "hypno",
+      "aliases": ["HypnoScript", "hypno"],
+      "extensions": [".hyp"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "hypno",
+      "scopeName": "source.hyp",
+      "path": "./syntaxes/hypno.tmLanguage.json"
+    }]
+  }
+}
