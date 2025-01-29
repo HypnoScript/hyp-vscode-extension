@@ -11,7 +11,7 @@ import {
 let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
-  const serverModule = context.asAbsolutePath(path.join("server", "server.js"));
+  const serverModule = context.asAbsolutePath(path.join("out", "server.js"));
 
   const keywords = [
     "Focus",
