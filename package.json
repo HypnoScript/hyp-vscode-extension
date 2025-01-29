@@ -6,11 +6,24 @@
   "engines": {
     "vscode": "^1.96.0"
   },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:hypnoscript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HypnoScript/vscode-extension.git"
+  },
+  "author": {
+    "name": "HypnoScript Team",
+    "email": "support@hypnose-stammtisch.de"
+  },
   "scripts": {
     "compile": "tsc",
     "watch": "tsc --watch",
     "test": "npm run compile && node ./out/test/runTest.js",
-    "pretest": "npm run compile"
+    "pretest": "npm run compile",
+    "package": "npx vsce package"
   },
   "categories": [
     "Programming Languages"

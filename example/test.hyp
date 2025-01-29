@@ -1,0 +1,17 @@
+Focus {
+
+  entrance {
+      observe "Countdown startet...";
+  }
+
+  induce count: number = 5;
+
+  while (count > 0) {
+      observe count;
+      drift(1000); // 1 Sekunde warten
+      count = count - 1;
+  }
+
+  observe "Hypnose aktiviert!";
+
+} Relax
