@@ -54,6 +54,13 @@
         "command": "hypnoscript.startLanguageServer",
         "title": "Start HypnoScript Language Server"
       }
+    ],
+    "iconThemes": [
+      {
+        "id": "hypnoscript-icons",
+        "label": "HypnoScript Icons",
+        "path": "./icons/hypnoscript-icon-theme.json"
+      }
     ]
   },
   "dependencies": {
