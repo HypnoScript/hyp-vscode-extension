@@ -6,6 +6,8 @@
   "engines": {
     "vscode": "^1.96.0"
   },
+  "publisher": "HypnoScript Team",
+  "icon": "icons/hypnoscript.png",
   "main": "./out/extension.js",
   "activationEvents": [
     "onLanguage:hypnoscript"
@@ -55,22 +57,18 @@
         "title": "Start HypnoScript Language Server"
       }
     ],
-    "iconThemes": [
-      {
-        "id": "hypnoscript-icons",
-        "label": "HypnoScript Icons",
-        "path": "./icons/hypnoscript-icon-theme.json"
-      }
-    ]
+    "fileIcons": {
+      "hypnoscript": "./icons/icon_256x256.png"
+    }
   },
   "dependencies": {
     "vscode-languageclient": "^9.0.1",
     "vscode-languageserver": "^9.0.1",
-    "vscode-languageserver-textdocument": "^1.0.12"
+    "vscode-languageserver-textdocument": "^1.0.12",
+    "prettier": "^3.4.2"
   },
   "devDependencies": {
     "@types/node": "^22.12.0",
-    "@types/vscode": "^1.96.0",
-    "prettier": "^3.4.2"
+    "@types/vscode": "^1.96.0"
   }
 }

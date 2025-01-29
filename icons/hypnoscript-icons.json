@@ -1,0 +1,13 @@
+{
+	"iconDefinitions": {
+		"hypnoscript-icon": {
+			"iconPath": "./icons/hypnoscript.png"
+		}
+	},
+	"fileExtensions": {
+		"hyp": "hypnoscript-icon"
+	},
+	"languageIds": {
+		"hypnoscript": "hypnoscript-icon"
+	}
+}
