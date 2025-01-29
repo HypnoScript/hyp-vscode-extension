@@ -18,10 +18,6 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
-      diagnosticProvider: {
-        interFileDependencies: true,
-        workspaceDiagnostics: true,
-      },
       completionProvider: {
         resolveProvider: true,
       },

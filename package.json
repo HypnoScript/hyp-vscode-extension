@@ -71,5 +71,8 @@
   "devDependencies": {
     "@types/node": "^22.12.0",
     "@types/vscode": "^1.96.0"
+  },
+  "volta": {
+    "node": "22.13.1"
   }
 }
