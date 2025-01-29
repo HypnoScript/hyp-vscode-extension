@@ -19,10 +19,19 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       diagnosticProvider: {
-        interFileDependencies: false,
-        workspaceDiagnostics: false
+        interFileDependencies: true,
+        workspaceDiagnostics: true,
+      },
+      completionProvider: {
+        resolveProvider: true,
       },
     },
+  };
+});
+
+connection.onRequest("textDocument/diagnostic", async (params) => {
+  return {
+    items: [], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
   };
 });
 
