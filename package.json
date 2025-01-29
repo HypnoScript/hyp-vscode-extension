@@ -26,7 +26,9 @@
     "test": "npm run compile && node ./out/test/runTest.js",
     "pretest": "npm run compile",
     "package": "npx vsce package",
-    "package-list": "npx vsce ls"
+    "package-list": "npx vsce ls",
+    "vsce-login": "npx vsce login HypnoScriptTeam",
+    "vsce-publish": "npx vsce publish"
   },
   "categories": [
     "Programming Languages"
@@ -48,7 +50,7 @@
     "grammars": [
       {
         "language": "hypnoscript",
-        "scopeName": "source.hypnoscript",
+        "scopeName": "source.hyp",
         "path": "./syntaxes/hypnoscript.tmLanguage.json"
       }
     ],

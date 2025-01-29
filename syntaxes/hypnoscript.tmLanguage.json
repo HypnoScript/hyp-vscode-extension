@@ -11,10 +11,28 @@
 	],
 	"repository": {
 		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.hypno",
-				"match": "\\b(if|while|for|return)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "keyword.control.hypno",
+					"match": "\\b(Focus|Relax|if|else|while|loop|snap|sink|suggestion|awaken|observe|induce|trance|entrance|deepFocus|from|external|session|constructor|expose|conceal|dominant|drift|tranceify|mindLink|sharedTrance|imperative)\\b"
+				}
+			]
+		},
+		"types": {
+			"patterns": [
+				{
+					"name": "storage.type.hypno",
+					"match": "\\b(number|string|boolean|trance)\\b"
+				}
+			]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator.hypno",
+					"match": "\\b(youAreFeelingVerySleepy|lookAtTheWatch|fallUnderMySpell|==|!=|>=|<=|>|<|\\+|\\-|\\*|/|%)\\b"
+				}
+			]
 		},
 		"strings": {
 			"name": "string.quoted.double.hypno",
@@ -24,6 +42,27 @@
 				{
 					"name": "constant.character.escape.hypno",
 					"match": "\\\\."
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.hypno",
+					"match": "\\b[0-9]+(?:\\.[0-9]+)?\\b"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.hypno",
+					"match": "//.*"
+				},
+				{
+					"name": "comment.block.hypno",
+					"begin": "/\\*",
+					"end": "\\*/"
 				}
 			]
 		}

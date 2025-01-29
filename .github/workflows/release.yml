@@ -1,0 +1,43 @@
+name: Release HypnoScript Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🔍 Compile TypeScript
+        run: npm run compile
+
+      - name: 📦 Package VSCode Extension
+        run: npx vsce package
+
+      - name: 🗂️ Upload Artifact to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "*.vsix"
+          tag_name: ${{ github.ref }}
+          body: "🚀 New release of HypnoScript Extension!"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Publish to VSCode Marketplace
+        run: npx vsce publish -p ${{ secrets.VSCE_PAT }}
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
