@@ -1,30 +1,66 @@
 {
-    "comments": {
-        // symbol used for single line comment. Remove this entry if your language does not support line comments
-        "lineComment": "//",
-        // symbols used for start and end a block comment. Remove this entry if your language does not support block comments
-        "blockComment": [ "/*", "*/" ]
+  "scopeName": "source.hypnoscript",
+  "patterns": [
+    { "include": "#keywords" },
+    { "include": "#operators" },
+    { "include": "#types" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#comments" }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.hypnoscript",
+          "match": "\\b(Focus|Relax|if|else|while|loop|snap|sink|suggestion|awaken|call|induce|observe|trance|entrance|deepFocus|from|external|session|constructor|expose|conceal|dominant|drift|tranceify|mindLink|sharedTrance|imperative)\\b"
+        }
+      ]
     },
-    // symbols used as brackets
-    "brackets": [
-        ["{", "}"],
-        ["[", "]"],
-        ["(", ")"]
-    ],
-    // symbols that are auto closed when typing
-    "autoClosingPairs": [
-        ["{", "}"],
-        ["[", "]"],
-        ["(", ")"],
-        ["\"", "\""],
-        ["'", "'"]
-    ],
-    // symbols that can be used to surround a selection
-    "surroundingPairs": [
-        ["{", "}"],
-        ["[", "]"],
-        ["(", ")"],
-        ["\"", "\""],
-        ["'", "'"]
-    ]
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.hypnoscript",
+          "match": "\\b(youAreFeelingVerySleepy|lookAtTheWatch|fallUnderMySpell|==|!=|>=|<=|>|<|\\+|\\-|\\*|/|%)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.hypnoscript",
+          "match": "\\b(number|string|boolean|trance)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.hypnoscript",
+          "match": "\"(?:[^\"\\\\]|\\\\.)*\""
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hypnoscript",
+          "match": "\\b[0-9]+(?:\\.[0-9]+)?\\b"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.hypnoscript",
+          "match": "//.*"
+        },
+        {
+          "name": "comment.block.hypnoscript",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    }
+  }
 }
