@@ -56,10 +56,6 @@
       }
     ],
     "commands": [
-      {
-        "command": "hypnoscript.startLanguageServer",
-        "title": "Start HypnoScript Language Server"
-      }
     ],
     "fileIcons": {
       "hypnoscript": "./icons/icon_256x256.png"
