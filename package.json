@@ -2,7 +2,7 @@
   "name": "hypnoscript-support",
   "displayName": "HypnoScript Support",
   "description": "A Language support extension for the esotheric language HypnoScript",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -28,7 +28,8 @@
     "package": "npx vsce package",
     "package-list": "npx vsce ls",
     "vsce-login": "npx vsce login HypnoScriptTeam",
-    "vsce-publish": "npx vsce publish"
+    "vsce-publish": "npx vsce publish",
+    "debug": "npm run compile && npm run package"
   },
   "categories": [
     "Programming Languages"

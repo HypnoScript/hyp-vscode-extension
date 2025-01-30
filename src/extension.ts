@@ -98,11 +98,11 @@ export function activate(context: vscode.ExtensionContext) {
       "t" // Trigger für `session` und `tranceify`
     );
 
-    const formatterProvider =
-      vscode.languages.registerDocumentFormattingEditProvider(
-        "hypnoscript",
-        new HypnoScriptFormatter()
-      );
+  const formatterProvider =
+    vscode.languages.registerDocumentFormattingEditProvider(
+      "hypnoscript",
+      new HypnoScriptFormatter()
+    );
 
   const serverOptions: ServerOptions = {
     run: { module: serverModule, transport: TransportKind.ipc },
@@ -111,6 +111,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   const clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: "file", language: "hypnoscript" }],
+    synchronize: {
+      fileEvents: vscode.workspace.createFileSystemWatcher("**/.hyp"),
+    },
   };
 
   client = new LanguageClient(
