@@ -32,51 +32,6 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
   };
 });
 
-connection.onHover((params: TextDocumentPositionParams): Hover | undefined => {
-  console.log("🔥 Hover-Request für:", params);
-  const document = documents.get(params.textDocument.uri);
-  if (!document) return undefined;
-
-  const text = document.getText();
-  const offset = document.offsetAt(params.position);
-
-  // Finde das Wort unter der Maus
-  const wordMatch = text.slice(0, offset).match(/\b\w+$/);
-  if (!wordMatch) return undefined;
-  const word = wordMatch[0];
-
-  // 📝 Map mit Erklärungen für Keywords & Syntax
-  const descriptions: Record<string, string> = {
-    Focus:
-      "**Focus** - Startet ein HypnoScript-Programm.\n\n```hyp\nFocus {\n    // Code\n} Relax\n```",
-    Relax: "**Relax** - Beendet ein HypnoScript-Programm.",
-    induce:
-      "**induce** - Deklariert eine Variable.\n\n```hyp\ninduce x: number = 5;\n```",
-    suggestion:
-      "**suggestion** - Definiert eine Funktion.\n\n```hyp\nsuggestion add(a: number, b: number): number {\n    awaken a + b;\n}\n```",
-    observe:
-      '**observe** - Gibt Werte aus.\n\n```hyp\nobserve "Hallo, HypnoScript!";\n```',
-    trance: "**trance** - Spezieller HypnoScript-Datentyp.",
-    drift:
-      "**drift(ms)** - Verzögert die Ausführung.\n\n```hyp\ndrift(1000);\n```",
-    session:
-      "**session** - Erstellt eine OOP-Session.\n\n```hyp\nsession Person {\n    expose name: string;\n}\n```",
-    expose: "**expose** - Macht eine Session-Eigenschaft öffentlich.",
-    conceal: "**conceal** - Macht eine Session-Eigenschaft privat.",
-  };
-
-  if (descriptions[word]) {
-    return {
-      contents: {
-        kind: MarkupKind.Markdown,
-        value: descriptions[word],
-      },
-    };
-  }
-
-  return undefined;
-});
-
 connection.onRequest("textDocument/diagnostic", async (params) => {
   return {
     items: [
