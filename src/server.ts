@@ -22,7 +22,9 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Full,
-      hoverProvider: true,
+      hoverProvider: {
+        workDoneProgress: true,
+      },
       completionProvider: {
         resolveProvider: true,
       },
@@ -31,7 +33,7 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
 });
 
 connection.onHover((params: TextDocumentPositionParams): Hover | undefined => {
-  console.log("Hover", params.textDocument.uri, params.position);
+  console.log("🔥 Hover-Request für:", params);
   const document = documents.get(params.textDocument.uri);
   if (!document) return undefined;
 
@@ -77,7 +79,16 @@ connection.onHover((params: TextDocumentPositionParams): Hover | undefined => {
 
 connection.onRequest("textDocument/diagnostic", async (params) => {
   return {
-    items: [], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
+    items: [
+      {
+        message: "Keine Diagnosen verfügbar.",
+        range: {
+          start: { line: 0, character: 0 },
+          end: { line: 0, character: 0 },
+        },
+        severity: 0,
+      },
+    ], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
   };
 });
 

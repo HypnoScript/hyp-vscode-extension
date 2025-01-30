@@ -98,6 +98,34 @@ export function activate(context: vscode.ExtensionContext) {
       "t" // Trigger für `session` und `tranceify`
     );
 
+  const hoverProvider = vscode.languages.registerHoverProvider("hypnoscript", {
+    provideHover(document, position, token) {
+      const range = document.getWordRangeAtPosition(position);
+      if (!range) return;
+
+      const word = document.getText(range);
+      const hoverTexts: { [key: string]: string } = {
+        Focus: "Startet ein HypnoScript-Programm.",
+        Relax: "Beendet ein HypnoScript-Programm.",
+        induce: "Deklariert eine Variable.",
+        suggestion: "Definiert eine Funktion.",
+        awaken: "Gibt einen Wert aus einer Funktion zurück.",
+        observe: "Gibt eine Nachricht oder Variable aus.",
+        session: "Definiert eine objektorientierte Einheit.",
+        drift: "Verzögert die Programmausführung.",
+        tranceify: "Erstellt eine neue benutzerdefinierte Struktur.",
+      };
+
+      if (hoverTexts[word]) {
+        return new vscode.Hover(
+          new vscode.MarkdownString(`**${word}**\n\n${hoverTexts[word]}`)
+        );
+      }
+
+      return;
+    },
+  });
+
   const formatterProvider =
     vscode.languages.registerDocumentFormattingEditProvider(
       "hypnoscript",
@@ -123,6 +151,7 @@ export function activate(context: vscode.ExtensionContext) {
     clientOptions
   );
 
+  context.subscriptions.push(hoverProvider);
   context.subscriptions.push(completionProvider);
   context.subscriptions.push(structureCompletionProvider);
   context.subscriptions.push(formatterProvider);
