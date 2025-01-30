@@ -11,10 +11,14 @@ Diese Erweiterung fügt Syntax-Highlighting, Auto-Completion und Linter-Support 
 
 ## Installation
 
-```sh
-vsce package
-code --install-extension hypnoscript-support-0.0.1.vsix
+```bash
+npx vsce package
+code --install-extension hypnoscript-support-{version}.vsix
 ```
+
+### Alternative Installation
+
+[Download](https://marketplace.visualstudio.com/items?itemName=HypnoScriptTeam.hypnoscript-support)
 
 ## Nutzung
 
@@ -23,3 +27,11 @@ code --install-extension hypnoscript-support-0.0.1.vsix
 - Formatiere den Code mit SHIFT + ALT + F.
 
 Viel Spaß mit HypnoScript in VSCode! 🚀
+
+## Lizenz
+
+MIT License
+
+## Entwicklung
+
+[GitHub Repository](https://github.com/HypnoScript/hyp-vscode-extension)

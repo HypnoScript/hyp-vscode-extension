@@ -98,11 +98,46 @@ export function activate(context: vscode.ExtensionContext) {
       "t" // Trigger für `session` und `tranceify`
     );
 
-    const formatterProvider =
-      vscode.languages.registerDocumentFormattingEditProvider(
-        "hypnoscript",
-        new HypnoScriptFormatter()
-      );
+  const hoverProvider = vscode.languages.registerHoverProvider("hypnoscript", {
+    provideHover(document, position, token) {
+      const range = document.getWordRangeAtPosition(position);
+      if (!range) return;
+
+      const word = document.getText(range);
+      const hoverTexts: { [key: string]: string } = {
+        Focus:
+          "**Focus** - Startet ein HypnoScript-Programm.\n\n```hyp\nFocus {\n    // Code\n} Relax\n```",
+        Relax: "**Relax** - Beendet ein HypnoScript-Programm.",
+        induce:
+          "**induce** - Deklariert eine Variable.\n\n```hyp\ninduce x: number = 5;\n```",
+        suggestion:
+          "**suggestion** - Definiert eine Funktion.\n\n```hyp\nsuggestion add(a: number, b: number): number {\n    awaken a + b;\n}\n```",
+        observe:
+          '**observe** - Gibt Werte aus.\n\n```hyp\nobserve "Hallo, HypnoScript!";\n```',
+        trance: "**trance** - Spezieller HypnoScript-Datentyp.",
+        drift:
+          "**drift(ms)** - Verzögert die Ausführung.\n\n```hyp\ndrift(1000);\n```",
+        session:
+          "**session** - Erstellt eine OOP-Session.\n\n```hyp\nsession Person {\n    expose name: string;\n}\n```",
+        expose: "**expose** - Macht eine Session-Eigenschaft öffentlich.",
+        conceal: "**conceal** - Macht eine Session-Eigenschaft privat.",
+      };
+
+      if (hoverTexts[word]) {
+        return new vscode.Hover(
+          new vscode.MarkdownString(`**${word}**\n\n${hoverTexts[word]}`)
+        );
+      }
+
+      return;
+    },
+  });
+
+  const formatterProvider =
+    vscode.languages.registerDocumentFormattingEditProvider(
+      "hypnoscript",
+      new HypnoScriptFormatter()
+    );
 
   const serverOptions: ServerOptions = {
     run: { module: serverModule, transport: TransportKind.ipc },
@@ -111,6 +146,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   const clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: "file", language: "hypnoscript" }],
+    synchronize: {
+      fileEvents: vscode.workspace.createFileSystemWatcher("**/.hyp"),
+    },
   };
 
   client = new LanguageClient(
@@ -120,6 +158,7 @@ export function activate(context: vscode.ExtensionContext) {
     clientOptions
   );
 
+  context.subscriptions.push(hoverProvider);
   context.subscriptions.push(completionProvider);
   context.subscriptions.push(structureCompletionProvider);
   context.subscriptions.push(formatterProvider);

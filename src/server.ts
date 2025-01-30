@@ -8,6 +8,9 @@ import {
   TextDocumentSyncKind,
   InitializeResult,
   CompletionItemKind,
+  Hover,
+  MarkupKind,
+  TextDocumentPositionParams,
 } from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
 
@@ -18,7 +21,10 @@ const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 connection.onInitialize((params: InitializeParams): InitializeResult => {
   return {
     capabilities: {
-      textDocumentSync: TextDocumentSyncKind.Incremental,
+      textDocumentSync: TextDocumentSyncKind.Full,
+      hoverProvider: {
+        workDoneProgress: true,
+      },
       completionProvider: {
         resolveProvider: true,
       },
@@ -28,7 +34,16 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
 
 connection.onRequest("textDocument/diagnostic", async (params) => {
   return {
-    items: [], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
+    items: [
+      {
+        message: "Keine Diagnosen verfügbar.",
+        range: {
+          start: { line: 0, character: 0 },
+          end: { line: 0, character: 0 },
+        },
+        severity: 0,
+      },
+    ], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
   };
 });
 

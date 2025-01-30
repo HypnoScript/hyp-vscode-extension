@@ -10,3 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added support for HypnoScript
 - Added syntax highlighting
 - Added snippets
+
+## [1.1.0] - 2025-01-30
+
+- Added support for Hover descriptions in syntax highlighting
