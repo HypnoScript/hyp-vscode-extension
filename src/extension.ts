@@ -7,7 +7,7 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
-import { setLocale } from "./i18n";
+import { LocalTranslations, setLocale, t } from "./i18n";
 import { logger, config } from "./config";
 
 let client: LanguageClient;
@@ -17,7 +17,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const locale = vscode.env.language || "en";
     await setLocale(locale);
 
-    logger.info(`Aktiviere Extension im ${config.environment} Modus mit Locale: ${locale}`);
+    logger.info(t("extension_activation" as keyof LocalTranslations) + ` (Mode: ${config.environment}, Locale: ${locale})`);
 
     const serverModule = context.asAbsolutePath(path.join("out", "server.js"));
 
@@ -110,33 +110,23 @@ export async function activate(context: vscode.ExtensionContext) {
       provideHover(document, position, token) {
         const range = document.getWordRangeAtPosition(position);
         if (!range) return;
-
         const word = document.getText(range);
-        const hoverTexts: { [key: string]: string } = {
-          Focus:
-            "**Focus** - Startet ein HypnoScript-Programm.\n\n```hyp\nFocus {\n    // Code\n} Relax\n```",
-          Relax: "**Relax** - Beendet ein HypnoScript-Programm.",
-          induce:
-            "**induce** - Deklariert eine Variable.\n\n```hyp\ninduce x: number = 5;\n```",
-          suggestion:
-            "**suggestion** - Definiert eine Funktion.\n\n```hyp\nsuggestion add(a: number, b: number): number {\n    awaken a + b;\n}\n```",
-          observe:
-            '**observe** - Gibt Werte aus.\n\n```hyp\nobserve "Hallo, HypnoScript!";\n```',
-          trance: "**trance** - Spezieller HypnoScript-Datentyp.",
-          drift:
-            "**drift(ms)** - Verzögert die Ausführung.\n\n```hyp\ndrift(1000);\n```",
-          session:
-            "**session** - Erstellt eine OOP-Session.\n\n```hyp\nsession Person {\n    expose name: string;\n}\n```",
-          expose: "**expose** - Macht eine Session-Eigenschaft öffentlich.",
-          conceal: "**conceal** - Macht eine Session-Eigenschaft privat.",
+        // Mapping mit i18n-Übersetzungen für jeden Hover Text
+        const hoverMessages: { [key: string]: string } = {
+          Focus: t("Focus"),
+          Relax: t("Relax"),
+          induce: t("induce"),
+          suggestion: t("suggestion"),
+          observe: t("observe"),
+          trance: t("trance"),
+          drift: t("drift"),
+          session: t("session"),
+          expose: t("expose"),
+          conceal: t("conceal")
         };
-
-        if (hoverTexts[word]) {
-          return new vscode.Hover(
-            new vscode.MarkdownString(`**${word}**\n\n${hoverTexts[word]}`)
-          );
+        if (hoverMessages[word]) {
+          return new vscode.Hover(new vscode.MarkdownString(hoverMessages[word]));
         }
-
         return;
       },
     });
