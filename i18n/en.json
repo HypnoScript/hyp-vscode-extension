@@ -28,5 +28,10 @@
   "error_in_diagnostic_request": "Error in Diagnostic Request: ",
   "if": "**if** - Conditional Block.\n\n**Usage Example:**\n```hyp\nif (condition) {\n    // code to execute if condition is true\n} else {\n    // code to execute otherwise\n}\n```\n\n**Description:** Evaluates a condition and executes the associated code block if the condition is true. An optional `else` block may define an alternative execution path.",
   "else": "**else** - Alternative Branch in a Conditional.\n\n**Usage Example:**\n```hyp\nif (condition) {\n    // code if true\n} else {\n    // code if false\n}\n```\n\n**Description:** Provides an alternative code block that will execute if the condition in the corresponding `if` statement is false.",
-  "while": "**while** - Loop Structure.\n\n**Usage Example:**\n```hyp\nwhile (condition) {\n    // code to repeat while condition remains true\n}\n```\n\n**Description:** Repeatedly executes the enclosed code block as long as the evaluated condition is true."
+  "while": "**while** - Loop Structure.\n\n**Usage Example:**\n```hyp\nwhile (condition) {\n    // code to repeat while condition remains true\n}\n```\n\n**Description:** Repeatedly executes the enclosed code block as long as the evaluated condition is true.",
+  "error_unbalanced_braces": "Syntax error: Unbalanced braces detected. Please check your '{' and '}'.",
+  "error_missing_semicolon": "Syntax warning: Possibly missing semicolon at the end of the statement.",
+  "diagnostic_error_popup": "Syntax errors detected. Would you like to view suggested solutions?",
+  "diagnostic_solution_message": "Suggestion: Check that 'Focus' and 'Relax' are correctly used and all blocks are properly closed.",
+  "diagnostic_solution_button": "Show solution"
 }

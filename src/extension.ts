@@ -219,6 +219,27 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(formatterProvider);
 
     client.start();
+
+    // Neuen Listener für Diagnosen mit internationalisierten Texten hinzufügen:
+    vscode.languages.onDidChangeDiagnostics(() => {
+      const errorDiagnostics = vscode.window.visibleTextEditors
+          .filter(editor => editor.document.languageId === "hypnoscript")
+          .flatMap(editor => vscode.languages.getDiagnostics(editor.document.uri))
+          .filter(diag => diag.severity === vscode.DiagnosticSeverity.Error);
+          
+      if (errorDiagnostics.length > 0) {
+          vscode.window.showErrorMessage(
+              t("diagnostic_error_popup"),
+              t("diagnostic_solution_button")
+          ).then(selection => {
+              if (selection === t("diagnostic_solution_button")) {
+                  vscode.window.showInformationMessage(
+                      t("diagnostic_solution_message")
+                  );
+              }
+          });
+      }
+    });
   } catch (error) {
     logger.error("Fehler bei der Extension-Aktivierung: " + error);
   }

@@ -29,4 +29,10 @@ export interface LocalTranslations {
   if: string;
   else: string;
   while: string;
+  // Neue Schlüssel:
+  error_unbalanced_braces: string;
+  error_missing_semicolon: string;
+  diagnostic_error_popup: string;
+  diagnostic_solution_message: string;
+  diagnostic_solution_button: string;
 }

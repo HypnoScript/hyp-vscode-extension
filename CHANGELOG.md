@@ -25,6 +25,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Erweiterte Internationalisierung: Unterstützung für Deutsch und Englisch.
 - Beginn der Logging-Infrastruktur.
 
-## [1.2.1] - 2025-03-01
+## [1.3.0] - 2025-03-05
 
 - Unterstützung für Operatoren hinzugefügt!
+- Erweiterte Internationalisierung:
+  - Neue Lokalisierungsschlüssel eingeführt: 
+    - diagnostic_error_popup
+    - diagnostic_solution_message
+    - diagnostic_solution_button
+  - Anpassungen in extension.ts, i18n.ts, und localTranslations zur vollständigen Übersetzung.
