@@ -9,23 +9,22 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
 
     steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: 🏗️ Setup Node.js
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-
-      - name: 👷‍♂️ Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: 📦 Install Dependencies
+      - name: Install dependencies
         run: pnpm install
 
       - name: 🔍 Run TypeScript Compiler
