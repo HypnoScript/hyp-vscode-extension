@@ -55,8 +55,8 @@ connection.onRequest("textDocument/diagnostic", async (params) => {
 
 // 🔍 Auto-Completion Handler
 connection.onCompletion((_textDocumentPosition) => {
-    // Verwende t() für die Details der Completion Items
-    return [
+    // Bestehende Keyword-Vorschläge
+    const suggestions = [
       {
         label: "Focus",
         kind: CompletionItemKind.Keyword,
@@ -77,43 +77,133 @@ connection.onCompletion((_textDocumentPosition) => {
         kind: CompletionItemKind.Keyword,
         detail: t("comp_suggestion" as keyof LocalTranslations),
       },
+      {
+        label: "youAreFeelingVerySleepy",
+        kind: CompletionItemKind.Keyword,
+        detail: "Gleichheit (==) Operator",
+      },
+      {
+        label: "lookAtTheWatch",
+        kind: CompletionItemKind.Keyword,
+        detail: "Größer als (>) Operator",
+      },
+      {
+        label: "fallUnderMySpell",
+        kind: CompletionItemKind.Keyword,
+        detail: "Kleiner als (<) Operator",
+      },
+      {
+        label: "!=",
+        kind: CompletionItemKind.Keyword,
+        detail: "Ungleich (!=) Operator",
+      },
     ];
+    return suggestions;
 });
 
-// Einfacher Linter: Überprüft auf fehlendes `Focus` und `Relax`
-documents.onDidChangeContent((change) => {
-  try {
+// Neue Funktion zur Syntax-Analyse
+function checkSyntaxErrors(document: TextDocument): Diagnostic[] {
     const diagnostics: Diagnostic[] = [];
-    const text = change.document.getText();
+    const text = document.getText();
 
-    if (!text.includes("Focus")) {
-      diagnostics.push({
-        severity: DiagnosticSeverity.Error,
-        range: {
-          start: { line: 0, character: 0 },
-          end: { line: 0, character: 5 },
-        },
-        message: t("error_no_focus"),
-        source: "hypnoscript-linter",
-      });
+    // 1. Überprüfe ob 'Focus {' vorhanden ist.
+    if (!/Focus\s*\{/.test(text)) {
+        diagnostics.push({
+            severity: DiagnosticSeverity.Error,
+            range: {
+                start: { line: 0, character: 0 },
+                end: { line: 0, character: 5 },
+            },
+            message: t("error_no_focus"),
+            source: "hypnoscript-linter",
+        });
     }
 
-    if (!text.includes("Relax")) {
-      diagnostics.push({
-        severity: DiagnosticSeverity.Error,
-        range: {
-          start: { line: text.split("\n").length - 1, character: 0 },
-          end: { line: text.split("\n").length - 1, character: 5 },
-        },
-        message: t("error_no_relax"),
-        source: "hypnoscript-linter",
-      });
+    // 2. Überprüfe ob '} Relax' vorhanden ist.
+    if (!/\}\s*Relax/.test(text)) {
+        const lastLine = text.split("\n").length - 1;
+        diagnostics.push({
+            severity: DiagnosticSeverity.Error,
+            range: {
+                start: { line: lastLine, character: 0 },
+                end: { line: lastLine, character: 5 },
+            },
+            message: t("error_no_relax"),
+            source: "hypnoscript-linter",
+        });
     }
 
-    connection.sendDiagnostics({ uri: change.document.uri, diagnostics });
-  } catch (error) {
-    logger.error("Fehler beim Verarbeiten von Inhaltänderungen: " + error);
-  }
+    // 3. Überprüfe auf unbalancierte geschweifte Klammern.
+    const openBraces = (text.match(/\{/g) || []).length;
+    const closeBraces = (text.match(/\}/g) || []).length;
+    if (openBraces !== closeBraces) {
+        diagnostics.push({
+            severity: DiagnosticSeverity.Error,
+            range: {
+                start: { line: 0, character: 0 },
+                end: { line: 0, character: 1 },
+            },
+            message: t("error_unbalanced_braces"),
+            source: "hypnoscript-linter",
+        });
+    }
+
+    // 4. Überprüfe auf fehlende Strichpunkte am Zeilenende (nur einfache Prüfung).
+    const lines = text.split("\n");
+    lines.forEach((line, idx) => {
+        const trimmed = line.trim();
+        // Überspringe leere Zeilen oder Zeilen, die Blöcke öffnen/schließen
+        if (trimmed && !trimmed.endsWith(";") && !trimmed.endsWith("{") && !trimmed.endsWith("}") &&
+            // Erlaube Zeilen, die mit "Focus", "Relax", "entrance" etc. beginnen
+            !/^(Focus|Relax|entrance)/.test(trimmed)) {
+            diagnostics.push({
+                severity: DiagnosticSeverity.Warning,
+                range: {
+                    start: { line: idx, character: 0 },
+                    end: { line: idx, character: trimmed.length },
+                },
+                message: t("error_missing_semicolon"),
+                source: "hypnoscript-linter",
+            });
+        }
+    });
+    return diagnostics;
+}
+
+// Erweiterung des onDidChangeContent-Handlings:
+documents.onDidChangeContent((change) => {
+    try {
+        const diagnostics: Diagnostic[] = [];
+        const text = change.document.getText();
+        // Bestehende Prüfungen (Fehlendes Focus/Relax)
+        if (!text.includes("Focus")) {
+            diagnostics.push({
+                severity: DiagnosticSeverity.Error,
+                range: {
+                    start: { line: 0, character: 0 },
+                    end: { line: 0, character: 5 },
+                },
+                message: t("error_no_focus"),
+                source: "hypnoscript-linter",
+            });
+        }
+        if (!text.includes("Relax")) {
+            diagnostics.push({
+                severity: DiagnosticSeverity.Error,
+                range: {
+                    start: { line: text.split("\n").length - 1, character: 0 },
+                    end: { line: text.split("\n").length - 1, character: 5 },
+                },
+                message: t("error_no_relax"),
+                source: "hypnoscript-linter",
+            });
+        }
+        // Neue umfassende Syntax-Analyse
+        diagnostics.push(...checkSyntaxErrors(change.document));
+        connection.sendDiagnostics({ uri: change.document.uri, diagnostics });
+    } catch (error) {
+        logger.error("Fehler beim Verarbeiten von Inhaltänderungen: " + error);
+    }
 });
 
 function getWordRangeAtPosition(document: TextDocument, position: { line: number; character: number }) {

@@ -50,7 +50,10 @@ export async function activate(context: vscode.ExtensionContext) {
       "deepFocus",
       "call",
       "from",
-      "external"
+      "external",
+      "youAreFeelingVerySleepy",
+      "lookAtTheWatch",
+      "fallUnderMySpell"
     ];
 
     const completionProvider = vscode.languages.registerCompletionItemProvider(
@@ -102,6 +105,33 @@ export async function activate(context: vscode.ExtensionContext) {
         insertText: new vscode.SnippetString(
           "deepFocus {\n\t${1:// code block}\n}"
         ),
+      },
+      // Bestehendes if-Snippet mit Operator-Synonym (youAreFeelingVerySleepy)
+      {
+        label: "if (Operator-Synonym)",
+        detail: "if-Block unter Verwendung von 'youAreFeelingVerySleepy'",
+        documentation: "Verwendet 'youAreFeelingVerySleepy' statt '==' für den Vergleich.",
+        insertText: new vscode.SnippetString(
+          "if (${1:variable} youAreFeelingVerySleepy ${2:value}) {\n\t${3:// code}\n} else {\n\t${4:// alternative code}\n}"
+        ),
+      },
+      {
+        label: "Operator (Größer als)",
+        detail: "Verwendet 'lookAtTheWatch' als Ersatz für '>'",
+        documentation: "Setzt 'lookAtTheWatch' ein, um einen Wertvergleich im Sinne von '>' durchzuführen.",
+        insertText: new vscode.SnippetString("${1:variable} lookAtTheWatch ${2:value}")
+      },
+      {
+        label: "Operator (Kleiner als)",
+        detail: "Verwendet 'fallUnderMySpell' als Ersatz für '<'",
+        documentation: "Setzt 'fallUnderMySpell' ein, um einen Wertvergleich im Sinne von '<' durchzuführen.",
+        insertText: new vscode.SnippetString("${1:variable} fallUnderMySpell ${2:value}")
+      },
+      {
+        label: "Operator (Ungleich)",
+        detail: "Setzt '!=' zur Prüfung auf Ungleichheit ein",
+        documentation: "Verwendet den Ungleichheitsoperator '!=' für den Vergleich von Werten.",
+        insertText: new vscode.SnippetString("${1:variable} != ${2:value}")
       },
     ];
 
@@ -189,6 +219,27 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(formatterProvider);
 
     client.start();
+
+    // Neuen Listener für Diagnosen mit internationalisierten Texten hinzufügen:
+    vscode.languages.onDidChangeDiagnostics(() => {
+      const errorDiagnostics = vscode.window.visibleTextEditors
+          .filter(editor => editor.document.languageId === "hypnoscript")
+          .flatMap(editor => vscode.languages.getDiagnostics(editor.document.uri))
+          .filter(diag => diag.severity === vscode.DiagnosticSeverity.Error);
+          
+      if (errorDiagnostics.length > 0) {
+          vscode.window.showErrorMessage(
+              t("diagnostic_error_popup"),
+              t("diagnostic_solution_button")
+          ).then(selection => {
+              if (selection === t("diagnostic_solution_button")) {
+                  vscode.window.showInformationMessage(
+                      t("diagnostic_solution_message")
+                  );
+              }
+          });
+      }
+    });
   } catch (error) {
     logger.error("Fehler bei der Extension-Aktivierung: " + error);
   }
