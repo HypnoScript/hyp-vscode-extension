@@ -4,7 +4,7 @@
   "description": "A Language support extension for the esotheric language HypnoScript",
   "version": "1.2.0",
   "engines": {
-    "vscode": "^1.96.0"
+    "vscode": "^1.97.0"
   },
   "publisher": "HypnoScriptTeam",
   "icon": "icons/hypnoscript.png",
@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "prettier": "^3.5.2",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.2",
     "vscode-languageclient": "^9.0.1",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.12",
@@ -84,9 +84,10 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.5",
-    "@types/vscode": "^1.97.0"
+    "@types/vscode": "^1.97.0",
+    "@vscode/vsce": "^3.2.2"
   },
   "volta": {
-    "node": "22.13.1"
+    "node": "22.14.0"
   }
 }
