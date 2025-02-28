@@ -14,6 +14,7 @@ import {
 } from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { LocalTranslations, t } from "./i18n";
+import { logger } from "./config";
 
 // Verbindung zum Editor herstellen
 const connection = createConnection(ProposedFeatures.all);
@@ -34,18 +35,23 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
 });
 
 connection.onRequest("textDocument/diagnostic", async (params) => {
-  return {
-    items: [
-      {
-        message: "Keine Diagnosen verfügbar.",
-        range: {
-          start: { line: 0, character: 0 },
-          end: { line: 0, character: 0 },
+  try {
+    return {
+      items: [
+        {
+          message: "Keine Diagnosen verfügbar.",
+          range: {
+            start: { line: 0, character: 0 },
+            end: { line: 0, character: 0 },
+          },
+          severity: 0,
         },
-        severity: 0,
-      },
-    ], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
-  };
+      ],
+    };
+  } catch (error) {
+    logger.error("Fehler in Diagnostic Request: " + error);
+    throw error;
+  }
 });
 
 // 🔍 Auto-Completion Handler
@@ -98,34 +104,38 @@ connection.onHover((params: TextDocumentPositionParams): Hover | null => {
 
 // Einfacher Linter: Überprüft auf fehlendes `Focus` und `Relax`
 documents.onDidChangeContent((change) => {
-  const diagnostics: Diagnostic[] = [];
-  const text = change.document.getText();
+  try {
+    const diagnostics: Diagnostic[] = [];
+    const text = change.document.getText();
 
-  if (!text.includes("Focus")) {
-    diagnostics.push({
-      severity: DiagnosticSeverity.Error,
-      range: {
-        start: { line: 0, character: 0 },
-        end: { line: 0, character: 5 },
-      },
-      message: t("error_no_focus"),
-      source: "hypnoscript-linter",
-    });
+    if (!text.includes("Focus")) {
+      diagnostics.push({
+        severity: DiagnosticSeverity.Error,
+        range: {
+          start: { line: 0, character: 0 },
+          end: { line: 0, character: 5 },
+        },
+        message: t("error_no_focus"),
+        source: "hypnoscript-linter",
+      });
+    }
+
+    if (!text.includes("Relax")) {
+      diagnostics.push({
+        severity: DiagnosticSeverity.Error,
+        range: {
+          start: { line: text.split("\n").length - 1, character: 0 },
+          end: { line: text.split("\n").length - 1, character: 5 },
+        },
+        message: t("error_no_relax"),
+        source: "hypnoscript-linter",
+      });
+    }
+
+    connection.sendDiagnostics({ uri: change.document.uri, diagnostics });
+  } catch (error) {
+    logger.error("Fehler beim Verarbeiten von Inhaltänderungen: " + error);
   }
-
-  if (!text.includes("Relax")) {
-    diagnostics.push({
-      severity: DiagnosticSeverity.Error,
-      range: {
-        start: { line: text.split("\n").length - 1, character: 0 },
-        end: { line: text.split("\n").length - 1, character: 5 },
-      },
-      message: t("error_no_relax"),
-      source: "hypnoscript-linter",
-    });
-  }
-
-  connection.sendDiagnostics({ uri: change.document.uri, diagnostics });
 });
 
 function getWordRangeAtPosition(document: TextDocument, position: { line: number; character: number }) {
