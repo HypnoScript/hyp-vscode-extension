@@ -14,7 +14,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.hypno",
-					"match": "\\b(Focus|Relax|if|else|while|loop|snap|sink|suggestion|awaken|observe|induce|trance|entrance|deepFocus|from|external|session|constructor|expose|conceal|dominant|drift|tranceify|mindLink|sharedTrance|imperative)\\b"
+					"match": "\\b(Focus|Relax|if|else|while|loop|snap|sink|suggestion|awaken|observe|induce|session|expose|conceal|dominant|drift|tranceify|mindLink|sharedTrance|imperative|entrance|deepFocus|call|from|external)\\b"
 				}
 			]
 		},

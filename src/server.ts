@@ -13,8 +13,9 @@ import {
   TextDocumentPositionParams,
 } from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
-import { LocalTranslations, t } from "./i18n";
 import { logger } from "./config";
+import { LocalTranslations } from "./interfaces/localTranslations";
+import { t } from "./i18n";
 
 // Verbindung zum Editor herstellen
 const connection = createConnection(ProposedFeatures.all);
@@ -39,7 +40,7 @@ connection.onRequest("textDocument/diagnostic", async (params) => {
     return {
       items: [
         {
-          message: "Keine Diagnosen verfügbar.",
+          message: t("no_diagnostics" as keyof LocalTranslations),
           range: {
             start: { line: 0, character: 0 },
             end: { line: 0, character: 0 },
@@ -49,34 +50,35 @@ connection.onRequest("textDocument/diagnostic", async (params) => {
       ],
     };
   } catch (error) {
-    logger.error("Fehler in Diagnostic Request: " + error);
+    logger.error(t("error_in_diagnostic_request" as keyof LocalTranslations) + error);
     throw error;
   }
 });
 
 // 🔍 Auto-Completion Handler
 connection.onCompletion((_textDocumentPosition) => {
+    // Verwende t() für die Details der Completion Items
     return [
-        {
-            label: "Focus",
-            kind: CompletionItemKind.Keyword,
-            detail: "Startet ein HypnoScript-Programm"
-        },
-        {
-            label: "Relax",
-            kind: CompletionItemKind.Keyword,
-            detail: "Beendet ein HypnoScript-Programm"
-        },
-        {
-            label: "induce",
-            kind: CompletionItemKind.Keyword,
-            detail: "Deklariert eine Variable"
-        },
-        {
-            label: "suggestion",
-            kind: CompletionItemKind.Keyword,
-            detail: "Definiert eine Funktion"
-        }
+      {
+        label: "Focus",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_focus" as keyof LocalTranslations),
+      },
+      {
+        label: "Relax",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_relax" as keyof LocalTranslations),
+      },
+      {
+        label: "induce",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_induce" as keyof LocalTranslations),
+      },
+      {
+        label: "suggestion",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_suggestion" as keyof LocalTranslations),
+      },
     ];
 });
 

@@ -1,22 +1,8 @@
 import * as path from "path";
 import * as fs from "fs/promises";
+import { LocalTranslations } from "./interfaces/localTranslations";
 
 // Neues Interface für locale.json Dateien:
-export interface LocalTranslations {
-	Focus: string;
-	Relax: string;
-	induce: string;
-	suggestion: string;
-	observe: string;
-	trance: string;
-	drift: string;
-	session: string;
-	expose: string;
-	conceal: string;
-	error_no_focus: string;
-	error_no_relax: string;
-}
-
 // Spezifischer Typ:
 export type TranslationMap = LocalTranslations;
 

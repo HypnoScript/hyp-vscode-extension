@@ -7,8 +7,9 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
-import { LocalTranslations, setLocale, t } from "./i18n";
+import { setLocale, t } from "./i18n";
 import { logger, config } from "./config";
+import { LocalTranslations } from "./interfaces/localTranslations";
 
 let client: LanguageClient;
 
@@ -17,7 +18,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const locale = vscode.env.language || "en";
     await setLocale(locale);
 
-    logger.info(t("extension_activation" as keyof LocalTranslations) + ` (Mode: ${config.environment}, Locale: ${locale})`);
+    logger.info(t("extension_activation") + ` (Mode: ${config.environment}, Locale: ${locale})`);
 
     const serverModule = context.asAbsolutePath(path.join("out", "server.js"));
 
@@ -45,6 +46,11 @@ export async function activate(context: vscode.ExtensionContext) {
       "mindLink",
       "sharedTrance",
       "imperative",
+      "entrance",
+      "deepFocus",
+      "call",
+      "from",
+      "external"
     ];
 
     const completionProvider = vscode.languages.registerCompletionItemProvider(
@@ -67,20 +73,34 @@ export async function activate(context: vscode.ExtensionContext) {
     const structureSnippets = [
       {
         label: "session",
-        detail: "Erstellt eine neue HypnoScript-Session (OOP)",
-        documentation:
-          "Definiert eine Klasse in HypnoScript mit öffentlichen und privaten Feldern.",
+        detail: t("comp_session"),
+        documentation: t("comp_session"),
         insertText: new vscode.SnippetString(
           "session ${1:Name} {\n\texpose ${2:feld}: ${3:type};\n\tconceal ${4:secret}: ${5:type};\n\n\tsuggestion constructor(${6:args}) {\n\t\tthis.${2} = ${2};\n\t\tthis.${4} = ${4};\n\t}\n}"
         ),
       },
       {
         label: "tranceify",
-        detail: "Erstellt eine neue benutzerdefinierte Struktur",
-        documentation:
-          "Definiert eine `tranceify` Struktur zur Speicherung von Daten.",
+        detail: t("comp_tranceify"),
+        documentation: t("comp_tranceify"),
         insertText: new vscode.SnippetString(
           "tranceify ${1:Name} {\n\t${2:feld1}: ${3:type};\n\t${4:feld2}: ${5:type};\n}"
+        ),
+      },
+      {
+        label: "entrance",
+        detail: t("comp_entrance"),
+        documentation: t("comp_entrance"),
+        insertText: new vscode.SnippetString(
+          "entrance {\n\t${1:// initial code}\n}"
+        ),
+      },
+      {
+        label: "deepFocus",
+        detail: t("comp_deepfocus"),
+        documentation: t("comp_deepfocus"),
+        insertText: new vscode.SnippetString(
+          "deepFocus {\n\t${1:// code block}\n}"
         ),
       },
     ];
@@ -122,7 +142,11 @@ export async function activate(context: vscode.ExtensionContext) {
           drift: t("drift"),
           session: t("session"),
           expose: t("expose"),
-          conceal: t("conceal")
+          conceal: t("conceal"),
+          entrance: t("entrance"),
+          deepFocus: t("deepFocus"),
+          call: t("call"),
+          from: t("from_external")
         };
         if (hoverMessages[word]) {
           return new vscode.Hover(new vscode.MarkdownString(hoverMessages[word]));

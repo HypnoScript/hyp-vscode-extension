@@ -9,6 +9,21 @@
   "session": "**session** - Erstellt eine OOP-Session.\n\n```hyp\nsession Person {\n    expose name: string;\n}\n```",
   "expose": "**expose** - Macht eine Session-Eigenschaft öffentlich.",
   "conceal": "**conceal** - Macht eine Session-Eigenschaft privat.",
+  "entrance": "**entrance** - Definiert den Startblock, der zuerst ausgeführt wird.",
+  "deepFocus": "**deepFocus** - Alternative Syntax für Codeblöcke.",
+  "call": "**call** - Ruft eine Funktion auf.",
+  "from_external": "**from external** - Definiert eine externe Eingabequelle zur Initialisierung einer Variable.",
   "error_no_focus": "Programm muss mit 'Focus' beginnen.",
-  "error_no_relax": "Programm muss mit 'Relax' enden."
+  "error_no_relax": "Programm muss mit 'Relax' enden.",
+  "extension_activation": "HypnoScript Erweiterung aktiviert.",
+  "comp_focus": "Startet ein HypnoScript-Programm",
+  "comp_relax": "Beendet ein HypnoScript-Programm",
+  "comp_induce": "Deklariert eine Variable",
+  "comp_suggestion": "Definiert eine Funktion",
+  "comp_session": "**session** - Erstellt eine OOP-Session.",
+  "comp_tranceify": "**tranceify** - Erstellt eine benutzerdefinierte Struktur.",
+  "comp_entrance": "**entrance** - Definiert den Startblock, der zuerst ausgeführt wird.",
+  "comp_deepfocus": "**deepFocus** - Alternative Syntax für Codeblöcke.",
+  "no_diagnostics": "Keine Diagnosen verfügbar.",
+  "error_in_diagnostic_request": "Fehler in Diagnostic Request: "
 }
