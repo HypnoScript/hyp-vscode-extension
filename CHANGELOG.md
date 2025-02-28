@@ -24,3 +24,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Verbesserteres und umfassenderes Syntax Highlighting mit verbesserter Hover-Unterstützung.
 - Erweiterte Internationalisierung: Unterstützung für Deutsch und Englisch.
 - Beginn der Logging-Infrastruktur.
+
+## [1.2.1] - 2025-03-01
+
+- Unterstützung für Operatoren hinzugefügt!

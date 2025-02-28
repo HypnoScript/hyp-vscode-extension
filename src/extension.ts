@@ -50,7 +50,10 @@ export async function activate(context: vscode.ExtensionContext) {
       "deepFocus",
       "call",
       "from",
-      "external"
+      "external",
+      "youAreFeelingVerySleepy",
+      "lookAtTheWatch",
+      "fallUnderMySpell"
     ];
 
     const completionProvider = vscode.languages.registerCompletionItemProvider(
@@ -102,6 +105,33 @@ export async function activate(context: vscode.ExtensionContext) {
         insertText: new vscode.SnippetString(
           "deepFocus {\n\t${1:// code block}\n}"
         ),
+      },
+      // Bestehendes if-Snippet mit Operator-Synonym (youAreFeelingVerySleepy)
+      {
+        label: "if (Operator-Synonym)",
+        detail: "if-Block unter Verwendung von 'youAreFeelingVerySleepy'",
+        documentation: "Verwendet 'youAreFeelingVerySleepy' statt '==' für den Vergleich.",
+        insertText: new vscode.SnippetString(
+          "if (${1:variable} youAreFeelingVerySleepy ${2:value}) {\n\t${3:// code}\n} else {\n\t${4:// alternative code}\n}"
+        ),
+      },
+      {
+        label: "Operator (Größer als)",
+        detail: "Verwendet 'lookAtTheWatch' als Ersatz für '>'",
+        documentation: "Setzt 'lookAtTheWatch' ein, um einen Wertvergleich im Sinne von '>' durchzuführen.",
+        insertText: new vscode.SnippetString("${1:variable} lookAtTheWatch ${2:value}")
+      },
+      {
+        label: "Operator (Kleiner als)",
+        detail: "Verwendet 'fallUnderMySpell' als Ersatz für '<'",
+        documentation: "Setzt 'fallUnderMySpell' ein, um einen Wertvergleich im Sinne von '<' durchzuführen.",
+        insertText: new vscode.SnippetString("${1:variable} fallUnderMySpell ${2:value}")
+      },
+      {
+        label: "Operator (Ungleich)",
+        detail: "Setzt '!=' zur Prüfung auf Ungleichheit ein",
+        documentation: "Verwendet den Ungleichheitsoperator '!=' für den Vergleich von Werten.",
+        insertText: new vscode.SnippetString("${1:variable} != ${2:value}")
       },
     ];
 

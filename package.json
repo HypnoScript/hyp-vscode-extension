@@ -2,7 +2,7 @@
   "name": "hypnoscript-support",
   "displayName": "HypnoScript Support",
   "description": "A Language support extension for the esotheric language HypnoScript",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "engines": {
     "vscode": "^1.97.0"
   },

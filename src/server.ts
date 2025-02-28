@@ -55,8 +55,8 @@ connection.onRequest("textDocument/diagnostic", async (params) => {
 
 // 🔍 Auto-Completion Handler
 connection.onCompletion((_textDocumentPosition) => {
-    // Verwende t() für die Details der Completion Items
-    return [
+    // Bestehende Keyword-Vorschläge
+    const suggestions = [
       {
         label: "Focus",
         kind: CompletionItemKind.Keyword,
@@ -77,7 +77,28 @@ connection.onCompletion((_textDocumentPosition) => {
         kind: CompletionItemKind.Keyword,
         detail: t("comp_suggestion" as keyof LocalTranslations),
       },
+      {
+        label: "youAreFeelingVerySleepy",
+        kind: CompletionItemKind.Keyword,
+        detail: "Gleichheit (==) Operator",
+      },
+      {
+        label: "lookAtTheWatch",
+        kind: CompletionItemKind.Keyword,
+        detail: "Größer als (>) Operator",
+      },
+      {
+        label: "fallUnderMySpell",
+        kind: CompletionItemKind.Keyword,
+        detail: "Kleiner als (<) Operator",
+      },
+      {
+        label: "!=",
+        kind: CompletionItemKind.Keyword,
+        detail: "Ungleich (!=) Operator",
+      },
     ];
+    return suggestions;
 });
 
 // Einfacher Linter: Überprüft auf fehlendes `Focus` und `Relax`
