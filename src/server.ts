@@ -13,6 +13,9 @@ import {
   TextDocumentPositionParams,
 } from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
+import { logger } from "./config";
+import { LocalTranslations } from "./interfaces/localTranslations";
+import { t } from "./i18n";
 
 // Verbindung zum Editor herstellen
 const connection = createConnection(ProposedFeatures.all);
@@ -22,9 +25,7 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Full,
-      hoverProvider: {
-        workDoneProgress: true,
-      },
+      // hoverProvider entfernt, damit keine doppelten Hovers (Deutsch und Englisch) angezeigt werden:
       completionProvider: {
         resolveProvider: true,
       },
@@ -33,110 +34,86 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
 });
 
 connection.onRequest("textDocument/diagnostic", async (params) => {
-  return {
-    items: [
-      {
-        message: "Keine Diagnosen verfügbar.",
-        range: {
-          start: { line: 0, character: 0 },
-          end: { line: 0, character: 0 },
+  try {
+    return {
+      items: [
+        {
+          message: t("no_diagnostics" as keyof LocalTranslations),
+          range: {
+            start: { line: 0, character: 0 },
+            end: { line: 0, character: 0 },
+          },
+          severity: 0,
         },
-        severity: 0,
-      },
-    ], // Noch keine echten Diagnosen, aber VSCode erwartet eine Antwort.
-  };
+      ],
+    };
+  } catch (error) {
+    logger.error(t("error_in_diagnostic_request" as keyof LocalTranslations) + error);
+    throw error;
+  }
 });
 
 // 🔍 Auto-Completion Handler
 connection.onCompletion((_textDocumentPosition) => {
+    // Verwende t() für die Details der Completion Items
     return [
-        {
-            label: "Focus",
-            kind: CompletionItemKind.Keyword,
-            detail: "Startet ein HypnoScript-Programm"
-        },
-        {
-            label: "Relax",
-            kind: CompletionItemKind.Keyword,
-            detail: "Beendet ein HypnoScript-Programm"
-        },
-        {
-            label: "induce",
-            kind: CompletionItemKind.Keyword,
-            detail: "Deklariert eine Variable"
-        },
-        {
-            label: "suggestion",
-            kind: CompletionItemKind.Keyword,
-            detail: "Definiert eine Funktion"
-        }
-    ];
-});
-
-connection.onHover((params: TextDocumentPositionParams): Hover | null => {
-  const document = documents.get(params.textDocument.uri);
-  if (!document) return null;
-
-  const position = params.position;
-  const wordRange = getWordRangeAtPosition(document, position);
-  if (!wordRange) return null;
-
-  const word = document.getText(wordRange);
-  const hoverTexts: { [key: string]: string } = {
-    Focus: "**Focus** - Startet ein HypnoScript-Programm.\n\n```hyp\nFocus {\n    // Code\n} Relax\n```",
-    Relax: "**Relax** - Beendet ein HypnoScript-Programm.",
-    induce: "**induce** - Deklariert eine Variable.\n\n```hyp\ninduce x: number = 5;\n```",
-    suggestion: "**suggestion** - Definiert eine Funktion.\n\n```hyp\nsuggestion add(a: number, b: number): number {\n    awaken a + b;\n}\n```",
-    observe: '**observe** - Gibt Werte aus.\n\n```hyp\nobserve "Hallo, HypnoScript!";\n```',
-    trance: "**trance** - Spezieller HypnoScript-Datentyp.",
-    drift: "**drift(ms)** - Verzögert die Ausführung.\n\n```hyp\ndrift(1000);\n```",
-    session: "**session** - Erstellt eine OOP-Session.\n\n```hyp\nsession Person {\n    expose name: string;\n}\n```",
-    expose: "**expose** - Macht eine Session-Eigenschaft öffentlich.",
-    conceal: "**conceal** - Macht eine Session-Eigenschaft privat.",
-  };
-
-  if (hoverTexts[word]) {
-    return {
-      contents: {
-        kind: MarkupKind.Markdown,
-        value: `**${word}**\n\n${hoverTexts[word]}`,
+      {
+        label: "Focus",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_focus" as keyof LocalTranslations),
       },
-    };
-  }
-
-  return null;
+      {
+        label: "Relax",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_relax" as keyof LocalTranslations),
+      },
+      {
+        label: "induce",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_induce" as keyof LocalTranslations),
+      },
+      {
+        label: "suggestion",
+        kind: CompletionItemKind.Keyword,
+        detail: t("comp_suggestion" as keyof LocalTranslations),
+      },
+    ];
 });
 
 // Einfacher Linter: Überprüft auf fehlendes `Focus` und `Relax`
 documents.onDidChangeContent((change) => {
-  const diagnostics: Diagnostic[] = [];
-  const text = change.document.getText();
+  try {
+    const diagnostics: Diagnostic[] = [];
+    const text = change.document.getText();
 
-  if (!text.includes("Focus")) {
-    diagnostics.push({
-      severity: DiagnosticSeverity.Error,
-      range: {
-        start: { line: 0, character: 0 },
-        end: { line: 0, character: 5 },
-      },
-      message: "Programm muss mit 'Focus' beginnen.",
-      source: "hypnoscript-linter",
-    });
+    if (!text.includes("Focus")) {
+      diagnostics.push({
+        severity: DiagnosticSeverity.Error,
+        range: {
+          start: { line: 0, character: 0 },
+          end: { line: 0, character: 5 },
+        },
+        message: t("error_no_focus"),
+        source: "hypnoscript-linter",
+      });
+    }
+
+    if (!text.includes("Relax")) {
+      diagnostics.push({
+        severity: DiagnosticSeverity.Error,
+        range: {
+          start: { line: text.split("\n").length - 1, character: 0 },
+          end: { line: text.split("\n").length - 1, character: 5 },
+        },
+        message: t("error_no_relax"),
+        source: "hypnoscript-linter",
+      });
+    }
+
+    connection.sendDiagnostics({ uri: change.document.uri, diagnostics });
+  } catch (error) {
+    logger.error("Fehler beim Verarbeiten von Inhaltänderungen: " + error);
   }
-
-  if (!text.includes("Relax")) {
-    diagnostics.push({
-      severity: DiagnosticSeverity.Error,
-      range: {
-        start: { line: text.split("\n").length - 1, character: 0 },
-        end: { line: text.split("\n").length - 1, character: 5 },
-      },
-      message: "Programm muss mit 'Relax' enden.",
-      source: "hypnoscript-linter",
-    });
-  }
-
-  connection.sendDiagnostics({ uri: change.document.uri, diagnostics });
 });
 
 function getWordRangeAtPosition(document: TextDocument, position: { line: number; character: number }) {

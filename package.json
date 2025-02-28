@@ -2,7 +2,7 @@
   "name": "hypnoscript-support",
   "displayName": "HypnoScript Support",
   "description": "A Language support extension for the esotheric language HypnoScript",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -55,21 +55,36 @@
         "path": "./syntaxes/hypnoscript.tmLanguage.json"
       }
     ],
-    "commands": [
-    ],
+    "commands": [],
     "fileIcons": {
       "hypnoscript": "./icons/icon_256x256.png"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "hypnoscript.locale": {
+          "type": "string",
+          "default": "de",
+          "enum": [
+            "de",
+            "en"
+          ],
+          "description": "Legt die Standard‑Sprache für die HypnoScript‑Erweiterung fest."
+        }
+      }
     }
   },
   "dependencies": {
+    "prettier": "^3.5.2",
+    "typescript": "^5.7.3",
     "vscode-languageclient": "^9.0.1",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.12",
-    "prettier": "^3.4.2"
+    "winston": "^3.17.0"
   },
   "devDependencies": {
-    "@types/node": "^22.12.0",
-    "@types/vscode": "^1.96.0"
+    "@types/node": "^22.13.5",
+    "@types/vscode": "^1.97.0"
   },
   "volta": {
     "node": "22.13.1"

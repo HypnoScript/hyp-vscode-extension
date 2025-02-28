@@ -18,3 +18,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.1.1] - 2025-01-31
 
 - Fixed issue with Hover descriptions
+
+## [1.2.0] - 2025-02-28
+
+- Verbesserteres und umfassenderes Syntax Highlighting mit verbesserter Hover-Unterstützung.
+- Erweiterte Internationalisierung: Unterstützung für Deutsch und Englisch.
+- Beginn der Logging-Infrastruktur.
