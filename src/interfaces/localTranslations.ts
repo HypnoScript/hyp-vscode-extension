@@ -11,7 +11,6 @@ export interface LocalTranslations {
   conceal: string;
   error_no_focus: string;
   error_no_relax: string;
-  // hinzugefügte Felder basierend auf den JSON-Internationalisierungen:
   entrance: string;
   deepFocus: string;
   call: string;
@@ -27,4 +26,7 @@ export interface LocalTranslations {
   comp_deepfocus: string;
   no_diagnostics: string;
   error_in_diagnostic_request: string;
+  if: string;
+  else: string;
+  while: string;
 }

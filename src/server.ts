@@ -25,9 +25,7 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Full,
-      hoverProvider: {
-        workDoneProgress: true,
-      },
+      // hoverProvider entfernt, damit keine doppelten Hovers (Deutsch und Englisch) angezeigt werden:
       completionProvider: {
         resolveProvider: true,
       },
@@ -80,28 +78,6 @@ connection.onCompletion((_textDocumentPosition) => {
         detail: t("comp_suggestion" as keyof LocalTranslations),
       },
     ];
-});
-
-connection.onHover((params: TextDocumentPositionParams): Hover | null => {
-  const document = documents.get(params.textDocument.uri);
-  if (!document) return null;
-
-  const position = params.position;
-  const wordRange = getWordRangeAtPosition(document, position);
-  if (!wordRange) return null;
-
-  const word = document.getText(wordRange);
-  // Nutzung von i18n: Übersetzung anhand des Wortes
-  const translation = t(word as keyof LocalTranslations);
-  if (translation !== word) {
-    return {
-      contents: {
-        kind: MarkupKind.Markdown,
-        value: `**${word}**\n\n${translation}`,
-      },
-    };
-  }
-  return null;
 });
 
 // Einfacher Linter: Überprüft auf fehlendes `Focus` und `Relax`

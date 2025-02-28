@@ -131,7 +131,7 @@ export async function activate(context: vscode.ExtensionContext) {
         const range = document.getWordRangeAtPosition(position);
         if (!range) return;
         const word = document.getText(range);
-        // Mapping mit i18n-Übersetzungen für jeden Hover Text
+        // Aktualisiertes Mapping mit den Basisblöcken:
         const hoverMessages: { [key: string]: string } = {
           Focus: t("Focus"),
           Relax: t("Relax"),
@@ -146,7 +146,10 @@ export async function activate(context: vscode.ExtensionContext) {
           entrance: t("entrance"),
           deepFocus: t("deepFocus"),
           call: t("call"),
-          from: t("from_external")
+          from: t("from_external"),
+          if: t("if"),
+          else: t("else"),
+          while: t("while")
         };
         if (hoverMessages[word]) {
           return new vscode.Hover(new vscode.MarkdownString(hoverMessages[word]));
