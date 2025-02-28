@@ -7,10 +7,15 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
+import { setLocale } from "./i18n";
 
 let client: LanguageClient;
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+  // Automatische Erkennung der aktiven Sprache, Fallback = "en"
+  const locale = vscode.env.language || "en";
+  await setLocale(locale);
+
   const serverModule = context.asAbsolutePath(path.join("out", "server.js"));
 
   const keywords = [

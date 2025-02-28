@@ -59,6 +59,17 @@
     ],
     "fileIcons": {
       "hypnoscript": "./icons/icon_256x256.png"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "hypnoscript.locale": {
+          "type": "string",
+          "default": "de",
+          "enum": ["de", "en"],
+          "description": "Legt die Standard‑Sprache für die HypnoScript‑Erweiterung fest."
+        }
+      }
     }
   },
   "dependencies": {

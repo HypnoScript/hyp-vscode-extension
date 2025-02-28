@@ -13,6 +13,7 @@ import {
   TextDocumentPositionParams,
 } from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
+import { LocalTranslations, t } from "./i18n";
 
 // Verbindung zum Editor herstellen
 const connection = createConnection(ProposedFeatures.all);
@@ -82,28 +83,16 @@ connection.onHover((params: TextDocumentPositionParams): Hover | null => {
   if (!wordRange) return null;
 
   const word = document.getText(wordRange);
-  const hoverTexts: { [key: string]: string } = {
-    Focus: "**Focus** - Startet ein HypnoScript-Programm.\n\n```hyp\nFocus {\n    // Code\n} Relax\n```",
-    Relax: "**Relax** - Beendet ein HypnoScript-Programm.",
-    induce: "**induce** - Deklariert eine Variable.\n\n```hyp\ninduce x: number = 5;\n```",
-    suggestion: "**suggestion** - Definiert eine Funktion.\n\n```hyp\nsuggestion add(a: number, b: number): number {\n    awaken a + b;\n}\n```",
-    observe: '**observe** - Gibt Werte aus.\n\n```hyp\nobserve "Hallo, HypnoScript!";\n```',
-    trance: "**trance** - Spezieller HypnoScript-Datentyp.",
-    drift: "**drift(ms)** - Verzögert die Ausführung.\n\n```hyp\ndrift(1000);\n```",
-    session: "**session** - Erstellt eine OOP-Session.\n\n```hyp\nsession Person {\n    expose name: string;\n}\n```",
-    expose: "**expose** - Macht eine Session-Eigenschaft öffentlich.",
-    conceal: "**conceal** - Macht eine Session-Eigenschaft privat.",
-  };
-
-  if (hoverTexts[word]) {
+  // Nutzung von i18n: Übersetzung anhand des Wortes
+  const translation = t(word as keyof LocalTranslations);
+  if (translation !== word) {
     return {
       contents: {
         kind: MarkupKind.Markdown,
-        value: `**${word}**\n\n${hoverTexts[word]}`,
+        value: `**${word}**\n\n${translation}`,
       },
     };
   }
-
   return null;
 });
 
@@ -119,7 +108,7 @@ documents.onDidChangeContent((change) => {
         start: { line: 0, character: 0 },
         end: { line: 0, character: 5 },
       },
-      message: "Programm muss mit 'Focus' beginnen.",
+      message: t("error_no_focus"),
       source: "hypnoscript-linter",
     });
   }
@@ -131,7 +120,7 @@ documents.onDidChangeContent((change) => {
         start: { line: text.split("\n").length - 1, character: 0 },
         end: { line: text.split("\n").length - 1, character: 5 },
       },
-      message: "Programm muss mit 'Relax' enden.",
+      message: t("error_no_relax"),
       source: "hypnoscript-linter",
     });
   }

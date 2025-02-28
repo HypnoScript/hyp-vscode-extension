@@ -1,0 +1,14 @@
+{
+  "Focus": "**Focus** - Starts a HypnoScript program.\n\n```hyp\nFocus {\n    // Code\n} Relax\n```",
+  "Relax": "**Relax** - Ends a HypnoScript program.",
+  "induce": "**induce** - Declares a variable.\n\n```hyp\ninduce x: number = 5;\n```",
+  "suggestion": "**suggestion** - Defines a function.\n\n```hyp\nsuggestion add(a: number, b: number): number {\n    awaken a + b;\n}\n```",
+  "observe": "**observe** - Outputs values.\n\n```hyp\nobserve \"Hello, HypnoScript!\";\n```",
+  "trance": "**trance** - Special HypnoScript data type.",
+  "drift": "**drift(ms)** - Delays execution.\n\n```hyp\ndrift(1000);\n```",
+  "session": "**session** - Creates an OOP session.\n\n```hyp\nsession Person {\n    expose name: string;\n}\n```",
+  "expose": "**expose** - Makes a session property public.",
+  "conceal": "**conceal** - Makes a session property private.",
+  "error_no_focus": "Program must start with 'Focus'.",
+  "error_no_relax": "Program must end with 'Relax'."
+}
